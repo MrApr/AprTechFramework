@@ -1,0 +1,23 @@
+{
+    "name": "heroes/dating_portal",
+    "description": "A portal for dating, matching, finding cases and chat",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mr Apr",
+            "email": "admin@aprtech.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "classmap": [
+            "bootstrap/BaseFiles"
+        ]
+    },
+    "require": {
+
+    }
+}
