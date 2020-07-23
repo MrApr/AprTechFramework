@@ -20,7 +20,7 @@ class Router
      */
     public function __construct()
     {
-        $this->requestedRoute = $_SERVER['REQUEST_URI'];
+        $this->requestedRoute = trim(strtok($_SERVER['REQUEST_URI'],'?'),'/');
     }
 
     /**
@@ -42,7 +42,7 @@ class Router
 
         $this->routes[] = [
             "method" => $name,
-            "route" => $arguments[0],
+            "route" => trim($arguments[0],'/'),
             "action" => $this->transRouteAction($arguments[1])
         ];
     }
@@ -65,5 +65,55 @@ class Router
             "class" => $action[0],
             "method" => $action[1]
         ];
+    }
+
+    /**
+     * Find Matching route with sent params then
+     */
+    public function findMatchingRoute()
+    {
+        $requested_route = $this->checkRoutesAreEqual($this->requestedRoute);
+        $params = $this->extractParams($this->requestedRoute,$requested_route['route']);
+    }
+
+
+    /**
+     * Check if user requested route exists in registered routes
+     * @param string $requested_url
+     * @return mixed
+     */
+    public function checkRoutesAreEqual(string $requested_url)
+    {
+        $routes = $this->routes;
+
+        foreach ($routes as $route)
+        {
+            $url = $route['route'];
+
+            $pattern = preg_replace('/{(.*?)}/','*',$url);
+
+            if(fnmatch($pattern,$requested_url))
+            {
+                return $route;
+            }
+        }
+    }
+
+
+    /**
+     * Extract passed params from route
+     * @param string $url
+     * @param string $pattern
+     * @return mixed
+     */
+    public function extractParams(string $url, string $pattern)
+    {
+        $pattern .= "/";
+        $url .= "/";
+        $pattern = preg_replace('/{(.*?)}/','*',$pattern);
+        $pattern = str_replace('/','\/',$pattern);
+        $pattern = str_replace('*','(.*?)',$pattern);
+        preg_match_all("/".$pattern."/",$url,$matches);
+        return $matches;
     }
 }
