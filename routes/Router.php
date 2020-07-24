@@ -73,7 +73,19 @@ class Router
     public function findMatchingRoute()
     {
         $requested_route = $this->checkRoutesAreEqual($this->requestedRoute);
-        $params = $this->extractParams($this->requestedRoute,$requested_route['route']);
+
+        if(!is_countable($requested_route))
+        {
+            die("404 not found");
+        }
+
+        $this->checkRequestMethodIsValid($requested_route['method']);
+        $has_params = $this->checkRouteHasParams($requested_route['route']);
+
+        if($has_params)
+        {
+            $params = $this->extractParams($this->requestedRoute,$requested_route['route']);
+        }
     }
 
 
@@ -116,4 +128,33 @@ class Router
         preg_match_all("/".$pattern."/",$url,$matches);
         return $matches;
     }
+
+    /**
+     * This method checks if request method is valid or not!
+     * @param string $requested_route_type
+     */
+    public function checkRequestMethodIsValid(string $requested_route_type)
+    {
+        if($requested_route_type != strtolower($_SERVER['REQUEST_METHOD']))
+        {
+            die("Invalid method for this Route");
+        }
+    }
+
+
+    public function checkRouteHasParams(string $pattern)
+    {
+        $pattern .= "/";
+        $pattern = "/".$pattern;
+        preg_match_all('/{(.*?)}/',$pattern,$matches);
+
+        if(count($matches) == 2 && isset($matches[1]) && count($matches[1]))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
