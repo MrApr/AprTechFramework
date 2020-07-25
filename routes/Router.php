@@ -86,6 +86,10 @@ class Router
         {
             $params = $this->extractParams($this->requestedRoute,$requested_route['route']);
         }
+
+        $route_handler = new RouteHandler();
+        $route_handler->executeRequest($requested_route['action']);
+//        $this->executeRequest($requested_route['action']);
     }
 
 
@@ -142,6 +146,11 @@ class Router
     }
 
 
+    /**
+     * Checks if Router has parameters or not and returns true if router has params
+     * @param string $pattern
+     * @return bool
+     */
     public function checkRouteHasParams(string $pattern)
     {
         $pattern .= "/";
@@ -155,6 +164,4 @@ class Router
 
         return false;
     }
-
-
 }

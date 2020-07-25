@@ -15,6 +15,9 @@
         },
         "classmap": [
             "bootstrap/BaseFiles"
+        ],
+        "files": [
+            "bootstrap/Helpers/RouteHandler.php"
         ]
     },
     "require": {
