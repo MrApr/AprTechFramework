@@ -88,7 +88,7 @@ class Router
         }
 
         $route_handler = new RouteHandler();
-        $route_handler->executeRequest($requested_route['action'],[isset($params) && count($params)] ? $params : []);
+        $route_handler->executeRequest($requested_route['action'],(isset($params) && count($params)) ? $params : []);
     }
 
 

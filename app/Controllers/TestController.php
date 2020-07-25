@@ -7,9 +7,10 @@ namespace App\Controllers;
 class TestController
 {
 
-    public function test($name,$family)
+    public function test()
     {
 
-        echo $name." -> ".$family;
+        echo "hi";
+//        echo $name." -> ".$family;
     }
 }
