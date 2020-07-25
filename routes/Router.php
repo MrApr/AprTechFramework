@@ -88,8 +88,7 @@ class Router
         }
 
         $route_handler = new RouteHandler();
-        $route_handler->executeRequest($requested_route['action']);
-//        $this->executeRequest($requested_route['action']);
+        $route_handler->executeRequest($requested_route['action'],[isset($params) && count($params)] ? $params : []);
     }
 
 
@@ -130,6 +129,8 @@ class Router
         $pattern = str_replace('/','\/',$pattern);
         $pattern = str_replace('*','(.*?)',$pattern);
         preg_match_all("/".$pattern."/",$url,$matches);
+        unset($matches[0]);
+        $matches = array_map('current', $matches);
         return $matches;
     }
 

@@ -13,11 +13,12 @@ class RouteHandler
     /**
      * Loads controller with desired method and executes it
      * @param array $action
+     * @param array $parameters
      */
-    public function executeRequest(array $action)
+    public function executeRequest(array $action, array $parameters = [])
     {
         $controller_obj = $this->createControllerObject($action['class']);
-        $this->callObjectMethod($controller_obj,$action['method']);
+        $this->callObjectMethod($controller_obj,$action['method'], $parameters);
     }
 
     /**
@@ -56,16 +57,24 @@ class RouteHandler
         {
             die("Unknown method for instantiated controller object");
         }
+
+/*        $method = new ReflectionMethod($controller,$method);
+        foreach ($method->getParameters() as $param)
+        {
+
+        }*/
     }
 
     /**
      * First checks if the requested method exists, if it exist, call & executes it.
      * @param object $controller
      * @param string $method
+     * @param array $params
      */
-    public function callObjectMethod(object $controller,string $method)
+    public function callObjectMethod(object $controller,string $method, array $params)
     {
+        $params = array_values(array_filter($params));
         $this->checkControllerMethodExists($controller,$method);
-        call_user_func([$controller,$method]);
+        call_user_func_array([$controller,$method],$params);
     }
 }
