@@ -110,8 +110,6 @@ class PDOHelper
      */
     public function execute(bool $has_return_value = false)
     {
-        $return_value = true;
-
         try{
             $this->pdo_statement->execute((is_countable($this->pdo_stmt_values)) ? $this->pdo_stmt_values : null);
         }catch (PDOException $e)
@@ -123,7 +121,7 @@ class PDOHelper
             $return_value = $this->pdo_statement->fetchAll();
         }
         unset($this->pdo_stmt_values);
-        return $return_value;
+        return $return_value ?? true;
     }
 
     /**
