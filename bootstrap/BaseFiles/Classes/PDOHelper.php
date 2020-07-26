@@ -110,10 +110,20 @@ class PDOHelper
      */
     public function execute(bool $has_return_value = false)
     {
-        $this->pdo_statement->execute((is_countable($this->pdo_stmt_values)) ? $this->pdo_stmt_values : null);
-        if($has_return_value){
-            return $this->pdo_statement->fetchAll();
+        $return_value = true;
+
+        try{
+            $this->pdo_statement->execute((is_countable($this->pdo_stmt_values)) ? $this->pdo_stmt_values : null);
+        }catch (PDOException $e)
+        {
+            die("Unable to execute pdo with error : ".$e->getMessage());
         }
+
+        if($has_return_value){
+            $return_value = $this->pdo_statement->fetchAll();
+        }
+        unset($this->pdo_stmt_values);
+        return $return_value;
     }
 
     /**
