@@ -9,8 +9,6 @@ class TestController
 
     public function test()
     {
-
-        echo "hi";
-//        echo $name." -> ".$family;
+        return view("test_view",["name" => "Mohammad"]);
     }
 }
