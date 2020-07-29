@@ -52,14 +52,10 @@ class PDOHelper
      */
     public function __construct()
     {
-        $this->database = "new_bookstore";
-        $this->host = "localhost";
-        $this->user = "heroes";
-        $this->pass = "22510070";
-/*        $this->database = DATABASE;
+        $this->database = DATABASE;
         $this->host = DB_HOST;
         $this->user = DB_USER;
-        $this->pass = DB_PASS;*/
+        $this->pass = DB_PASS;
     }
 
     /**
@@ -76,6 +72,7 @@ class PDOHelper
         {
             die("cannot connect to pdo with error: ".$e->getMessage());
         }
+        return $this;
     }
 
     /**
@@ -86,12 +83,14 @@ class PDOHelper
         $this->pdo_connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_OBJ);
         $this->pdo_connection->setAttribute(PDO::ATTR_PERSISTENT,true);
         $this->pdo_connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+        return $this;
     }
 
     /**
      * Prepare PDO query statement to get executed
      * @param string $query
      * @param array|null $values
+     * @return $this
      */
     public function prepareQuery(string $query, array $values = null)
     {
@@ -101,6 +100,7 @@ class PDOHelper
         {
             $this->pdo_stmt_values = $values;
         }
+        return $this;
     }
 
     /**

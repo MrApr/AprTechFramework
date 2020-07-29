@@ -12,7 +12,7 @@ abstract class TableCreatorClass
      * Container to hold queries
      * @var
      */
-    private $query;
+    protected $query;
 
     /**
      * Container that holds injected pdo helper
@@ -24,7 +24,7 @@ abstract class TableCreatorClass
      * Container for pdo stmt values in execution
      * @var array
      */
-    private $values = [];
+    protected $values = [];
 
     /**
      * Injecting instantiated pdo helper in order to execute queries
@@ -34,6 +34,7 @@ abstract class TableCreatorClass
     public function __construct(PDOHelper $pdo_helper)
     {
         $this->pdo_helper = $pdo_helper;
+        $this->pdo_helper->connectToDB()->setOptionsToPDOConnection();
     }
 
     /**
@@ -48,7 +49,7 @@ abstract class TableCreatorClass
      */
     public function execute()
     {
-        $this->pdo_helper->prepareQuery($this->query,(is_countable($this->values)) ? $this->values : null);
-        $this->pdo_helper->execute();
+        $this->pdo_helper->prepareQuery($this->query,(is_countable($this->values)) ? $this->values : null)
+            ->execute();
     }
 }
