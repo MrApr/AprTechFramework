@@ -8,25 +8,25 @@ class Model implements ModelInterface
      * Container for holding related table to model name
      * @var
      */
-    private $table;
+    protected $table;
 
     /**
      * Container for holding dynamically created statements
      * @var
      */
-    private $statement;
+    protected $statement;
 
     /**
      * Container that holds statement parameters
      * @var array
      */
-    private $params = [];
+    protected $params = [];
 
     /**
      * Container for holding pdo helper
      * @var
      */
-    private $pdo_helper;
+    protected $pdo_helper;
 
     /**
      * Prepares pdo helper
@@ -35,6 +35,7 @@ class Model implements ModelInterface
     public function __construct()
     {
         $this->pdo_helper = new PDOHelper();
+        $this->pdo_helper->connectToDB();
     }
 
     /**
@@ -73,7 +74,7 @@ class Model implements ModelInterface
      */
     public function insert(array $params)
     {
-        $this->statement = "INSERT INTO `{$this->table}` {implode(array_keys($params),',')} VALUES ({str_repeat('?',count($params))})";
+        $this->statement = "INSERT INTO `{$this->table}` (".implode(array_keys($params),',').") VALUES (".str_repeat('?',count($params)).")";
         $this->params = array_values($params);
 
         $this->prepareStatement();
@@ -146,5 +147,10 @@ class Model implements ModelInterface
     {
         $return_values = $this->pdo_helper->execute($is_select);
         return $return_values;
+    }
+
+    public function __destruct()
+    {
+        unset($this->pdo_helper);
     }
 }
