@@ -74,7 +74,7 @@ class Model implements ModelInterface
      */
     public function insert(array $params)
     {
-        $this->statement = "INSERT INTO `{$this->table}` (".implode(array_keys($params),',').") VALUES (".str_repeat('?',count($params)).")";
+        $this->statement = "INSERT INTO `{$this->table}` (".implode(array_keys($params),',').") VALUES (".implode(',', array_fill(0, count($params), '?')).")";
         $this->params = array_values($params);
 
         $this->prepareStatement();
