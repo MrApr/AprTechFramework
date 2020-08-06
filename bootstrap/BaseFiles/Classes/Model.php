@@ -141,11 +141,19 @@ class Model implements ModelInterface
     /**
      * Executing prepared statement
      * @param bool $is_select
+     * @param bool $first_value
      * @return mixed
      */
-    public function execute(bool $is_select = false)
+    public function execute(bool $is_select = false, bool $first_value = false)
     {
         $return_values = $this->pdo_helper->execute($is_select);
+        if($is_select && $first_value)
+        {
+            if (count($return_values) != count($return_values, COUNT_RECURSIVE))
+            {
+                $return_values = call_user_func_array('array_merge', $return_values);
+            }
+        }
         return $return_values;
     }
 
