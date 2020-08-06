@@ -12,5 +12,6 @@ function view(string $path,array $params = [])
         die("view not found");
     }
 
+    extract($params,EXTR_PREFIX_SAME, "wddx");
     include_once ROOT_DIR."/views/".$path.".php";
 }
