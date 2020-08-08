@@ -33,3 +33,11 @@ function storeFiles(string $file_name)
         return $path_filename_ext;
     }
 }
+
+function deleteUploadedFile(string $path)
+{
+    if(file_exists($path))
+    {
+        unlink($path);
+    }
+}
