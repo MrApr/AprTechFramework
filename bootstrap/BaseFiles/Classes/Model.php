@@ -81,19 +81,21 @@ class Model implements ModelInterface
         return $this;
     }
 
+
     /**
      * Updating rows in desired table
      * @param array $params
+     * @param array $values
      * @param string $condition
      * @return mixed
      */
-    public function update(array $params, string $condition = null)
+    public function update(array $params, array $values,string $condition = null)
     {
-        $this->statement = "UPDATE FROM SET";
-        $counter = 0;
-        foreach ($params as $param_key => $param_value)
+        $this->statement = "UPDATE `{$this->table}` SET ";
+        $counter = 1;
+        foreach ($params as $param)
         {
-            $this->statement .= "{$param_key} = {$param_value}";
+            $this->statement .= "{$param} = ?";
             if($counter < count($params))
             {
                 $this->statement .= ", ";
@@ -103,9 +105,10 @@ class Model implements ModelInterface
 
         if($condition)
         {
-            $this->statement .= $condition;
+            $this->statement .= " ".$condition;
         }
 
+        $this->params = $values;
         $this->prepareStatement();
         return $this;
     }
