@@ -63,7 +63,6 @@ class Model implements ModelInterface
             $this->params = $params;
         }
 
-        $this->prepareStatement();
         return $this;
     }
 
@@ -77,7 +76,6 @@ class Model implements ModelInterface
         $this->statement = "INSERT INTO `{$this->table}` (".implode(array_keys($params),',').") VALUES (".implode(',', array_fill(0, count($params), '?')).")";
         $this->params = array_values($params);
 
-        $this->prepareStatement();
         return $this;
     }
 
@@ -109,7 +107,6 @@ class Model implements ModelInterface
         }
 
         $this->params = $values;
-        $this->prepareStatement();
         return $this;
     }
 
@@ -128,7 +125,6 @@ class Model implements ModelInterface
             $this->params = $params;
         }
 
-        $this->prepareStatement();
         return $this;
     }
 
@@ -149,6 +145,7 @@ class Model implements ModelInterface
      */
     public function execute(bool $is_select = false, bool $first_value = false)
     {
+        $this->prepareStatement();
         $return_values = $this->pdo_helper->execute($is_select);
         if($is_select && $first_value)
         {
