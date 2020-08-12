@@ -36,6 +36,7 @@ class Model implements ModelInterface
     {
         $this->pdo_helper = new PDOHelper();
         $this->pdo_helper->connectToDB();
+        $this->statement = "SELECT * FROM `{$this->table}` ";
     }
 
     /**
