@@ -57,12 +57,36 @@ class RouteHandler
         {
             die("Unknown method for instantiated controller object");
         }
+    }
 
-/*        $method = new ReflectionMethod($controller,$method);
-        foreach ($method->getParameters() as $param)
+
+    /**
+     * Re order passed params for calling function passing arguments
+     * @param array $params
+     * @param object $controller
+     * @param string $method
+     * @return array
+     * @throws ReflectionException
+     */
+    public function reOrderParamsForMethod(array $params,object $controller,string $method)
+    {
+        if(count($_GET) || count($_POST))
         {
+            $object = convertToObject((count($_POST)) ? $_POST : $_GET);
+            $index = 0;
 
-        }*/
+            $method = new ReflectionMethod($controller,$method);
+            foreach ($method->getParameters() as $param)
+            {
+                if($param->getType() == gettype($object))
+                {
+                    break;
+                }
+                $index++;
+            }
+            array_splice($params,$index,0,[$object]);
+        }
+        return $params;
     }
 
     /**
@@ -70,11 +94,13 @@ class RouteHandler
      * @param object $controller
      * @param string $method
      * @param array $params
+     * @throws ReflectionException
      */
     public function callObjectMethod(object $controller,string $method, array $params)
     {
         $params = array_values(array_filter($params));
         $this->checkControllerMethodExists($controller,$method);
+        $params = $this->reOrderParamsForMethod($params,$controller,$method);
         call_user_func_array([$controller,$method],$params);
     }
 }

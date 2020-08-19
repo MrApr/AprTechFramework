@@ -23,6 +23,9 @@ switch ($argv[1])
         $migrator = new Migrator();
         $migrator->launch();
         break;
+    case "serve":
+        echo shell_exec("php -S localhost:8000 -t public/");
+        break;
     default:
         echo "Please pass one of the valid parameters\n";
 }

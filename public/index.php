@@ -11,3 +11,5 @@ require_once ROOT_DIR . "/routes/Router.php";
 
 $router = new Router();
 require_once "../routes/Routes.php";
+$router->findMatchingRoute();
+destroyAllSessions();

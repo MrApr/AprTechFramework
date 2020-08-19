@@ -37,10 +37,11 @@ interface ModelInterface
     /**
      * Updating rows in desired table
      * @param array $params
+     * @param array $values
      * @param string $condition
      * @return mixed
      */
-    public function update(array $params, string $condition = null);
+    public function update(array $params ,array $values ,string $condition = null);
 
     /**
      * Deleting data from desired table
