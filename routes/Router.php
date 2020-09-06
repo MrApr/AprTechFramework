@@ -86,7 +86,6 @@ class Router
      */
     public function findMatchingRoute()
     {
-        die(print_r($this->routes));
         $requested_route = $this->checkRoutesAreEqual($this->requestedRoute);
 
         if(!is_countable($requested_route))
@@ -103,7 +102,7 @@ class Router
         }
 
         $route_handler = new RouteHandler();
-        $route_handler->executeRequest($requested_route['action'],(isset($params) && count($params)) ? $params : []);
+        $route_handler->executeRequest($requested_route['action'],(isset($params) && count($params)) ? $params : [],($requested_route['middleware']) ? $requested_route['middleware'] : null);
     }
 
 

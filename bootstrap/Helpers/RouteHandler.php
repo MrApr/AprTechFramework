@@ -9,16 +9,64 @@ class RouteHandler
      * @var string
      */
     private $ctlrStrSrc = "App\\Controllers\\";
+
+    /**
+     * Middleware source string container
+     * @var string
+     */
+    private string $middlewareSrc = "App\\Middlewares\\";
     
     /**
      * Loads controller with desired method and executes it
      * @param array $action
      * @param array $parameters
+     * @param string $middleware
      */
-    public function executeRequest(array $action, array $parameters = [])
+    public function executeRequest(array $action, array $parameters = [], string $middleware = null)
     {
+        if($middleware)
+        {
+            $this->executeMiddleware($middleware);
+        }
         $controller_obj = $this->createControllerObject($action['class']);
         $this->callObjectMethod($controller_obj,$action['method'], $parameters);
+    }
+
+    /**
+     * Executes requested middleware
+     * @param string $middleware_name
+     */
+    public function executeMiddleware(string $middleware_name)
+    {
+        $this->checkMiddlewareExistence($middleware_name);
+        $middleware = $this->middlewareSrc.$middleware_name;
+        $middleware = new $middleware();
+        $this->checkClassImplementedMiddlewareInstance($middleware);
+        $middleware->handle();
+    }
+
+    /**
+     * Checks if middleware exists
+     * @param string $middleware
+     */
+    public function checkMiddlewareExistence(string $middleware)
+    {
+        if(!class_exists($this->middlewareSrc.$middleware))
+        {
+            die("Middleware Doesnt exist");
+        }
+    }
+
+    /**
+     * Checks if middleware class implemented Middleware interface or not in order to execute
+     * @param object $middleware
+     */
+    public function checkClassImplementedMiddlewareInstance(object $middleware)
+    {
+        if(!$middleware instanceof MiddlewareInterface)
+        {
+            die("Included Middleware Doesnt implemented middleware instance");
+        }
     }
 
     /**
