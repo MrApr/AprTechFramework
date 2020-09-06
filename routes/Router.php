@@ -16,6 +16,12 @@ class Router
     private $routes = [];
 
     /**
+     * Default prefix for routes that will be set through routes.php
+     * @var string
+     */
+    private $prefix;
+
+    /**
      * Router constructor.
      */
     public function __construct()
@@ -42,7 +48,7 @@ class Router
 
         $this->routes[] = [
             "method" => $name,
-            "route" => trim($arguments[0],'/'),
+            "route" => ($this->prefix) ? $this->prefix."/".trim($arguments[0],'/') : trim($arguments[0],'/'),
             "action" => $this->transRouteAction($arguments[1])
         ];
     }
@@ -164,5 +170,34 @@ class Router
         }
 
         return false;
+    }
+
+    /**
+     * Setting prefix argument
+     * @param string $name
+     * @return $this
+     */
+    public function prefix(string $name)
+    {
+        $this->prefix = $name;
+        return $this;
+    }
+
+    /**
+     * Continue executing class and reset every unnecessary arguments that has been setted
+     * @param string $closure
+     */
+    public function group($closure = Router::class)
+    {
+        call_user_func($closure);
+        $this->resetArguments();
+    }
+
+    /**
+     * Reset unnecessary arguments that are not vital for Router.php functionality.
+     */
+    public function resetArguments()
+    {
+        $this->prefix = null;
     }
 }
