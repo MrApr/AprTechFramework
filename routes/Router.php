@@ -13,13 +13,20 @@ class Router
      * array that contains application routes
      * @var array
      */
-    private $routes = [];
+    private array $routes = [];
 
     /**
      * Default prefix for routes that will be set through routes.php
-     * @var string
+     * @var string|null
      */
-    private $prefix;
+    private ?string $prefix = null;
+
+    /**
+     * Container for holding desired middleware
+     * Middlewares are the classes that get executed before executing all other requests
+     * @var string|null
+     */
+    private ?string $middleware = null;
 
     /**
      * Router constructor.
@@ -49,7 +56,8 @@ class Router
         $this->routes[] = [
             "method" => $name,
             "route" => ($this->prefix) ? $this->prefix."/".trim($arguments[0],'/') : trim($arguments[0],'/'),
-            "action" => $this->transRouteAction($arguments[1])
+            "action" => $this->transRouteAction($arguments[1]),
+            'middleware' => ($this->middleware) ? $this->middleware : null
         ];
     }
 
@@ -78,6 +86,7 @@ class Router
      */
     public function findMatchingRoute()
     {
+        die(print_r($this->routes));
         $requested_route = $this->checkRoutesAreEqual($this->requestedRoute);
 
         if(!is_countable($requested_route))
@@ -184,6 +193,17 @@ class Router
     }
 
     /**
+     * Setting Middleware property
+     * @param string $name
+     * @return $this
+     */
+    public function middleware(string $name)
+    {
+        $this->middleware = $name;
+        return $this;
+    }
+
+    /**
      * Continue executing class and reset every unnecessary arguments that has been setted
      * @param string $closure
      */
@@ -199,5 +219,6 @@ class Router
     public function resetArguments()
     {
         $this->prefix = null;
+        $this->middleware = null;
     }
 }
