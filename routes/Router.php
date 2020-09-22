@@ -29,6 +29,12 @@ class Router
     private ?string $middleware = null;
 
     /**
+     * Container for defined namespace
+     * @var string|null
+     */
+    private ?string $namespace = null;
+
+    /**
      * Router constructor.
      */
     public function __construct()
@@ -76,7 +82,7 @@ class Router
         }
 
         return [
-            "class" => $action[0],
+            "class" => ($this->namespace) ? $this->namespace."\\".$action[0] : $action[0],
             "method" => $action[1]
         ];
     }
@@ -87,7 +93,6 @@ class Router
     public function findMatchingRoute()
     {
         $requested_route = $this->checkRoutesAreEqual($this->requestedRoute);
-
         if(!is_countable($requested_route))
         {
             die("404 not found");
@@ -199,6 +204,17 @@ class Router
     public function middleware(string $name)
     {
         $this->middleware = $name;
+        return $this;
+    }
+
+    /**
+     * Setting route groups namespace property
+     * @param string $namespace_name
+     * @return $this
+     */
+    public function namespace(string $namespace_name)
+    {
+        $this->namespace = $namespace_name;
         return $this;
     }
 
