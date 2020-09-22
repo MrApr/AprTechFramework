@@ -235,5 +235,6 @@ class Router
     {
         $this->prefix = null;
         $this->middleware = null;
+        $this->namespace = null;
     }
 }
