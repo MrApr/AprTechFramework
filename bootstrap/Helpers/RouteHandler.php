@@ -15,7 +15,7 @@ class RouteHandler
      * @var string
      */
     private string $middlewareSrc = "App\\Middlewares\\";
-    
+
     /**
      * Loads controller with desired method and executes it
      * @param array $action
@@ -75,7 +75,7 @@ class RouteHandler
      */
     public function checkControllerExists(string $controller)
     {
-        if(!class_exists($this->ctlrStrSrc.$controller))
+        if(!class_exists($this->ctlrStrSrc.str_replace('/','\\',$controller)))
         {
             die("Defined Controller doesn't exists");
         }
@@ -89,7 +89,7 @@ class RouteHandler
     public function createControllerObject(string $controller)
     {
         $this->checkControllerExists($controller);
-        $controller = $this->ctlrStrSrc.$controller;
+        $controller = $this->ctlrStrSrc.str_replace('/','\\',$controller);
         $controller = new $controller();
         return $controller;
     }
