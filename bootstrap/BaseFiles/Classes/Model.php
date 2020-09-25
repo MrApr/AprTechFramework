@@ -119,7 +119,7 @@ class Model implements ModelInterface
      */
     public function delete(string $condition = null, array $params = [])
     {
-        $this->statement = "DELETE FROM `table`";
+        $this->statement = "DELETE FROM `{$this->table}`";
         if($condition && is_countable($params))
         {
             $this->statement .= $condition;
