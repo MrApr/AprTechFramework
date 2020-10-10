@@ -65,7 +65,7 @@ class PDOHelper
     {
         $dsn = "mysql:host={$this->host};dbname={$this->database}";
         try{
-            $this->pdo_connection = new PDO($dsn,$this->user,$this->pass,[PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8mb4_general_ci'"]);
+            $this->pdo_connection = new PDO($dsn,$this->user,$this->pass,[PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8mb4'"]);
         }catch (PDOException $e)
         {
             die("cannot connect to pdo with error: ".$e->getMessage());
